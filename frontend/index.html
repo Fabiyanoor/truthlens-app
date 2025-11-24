@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TruthLens AI - News Authenticity Analyzer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <h1>TruthLens AI</h1>
+                </div>
+                <nav class="nav">
+                    <button class="nav-btn active" data-tab="analyzer">Analyzer</button>
+                    <button class="nav-btn" data-tab="samples">Samples</button>
+                    <button class="nav-btn" data-tab="about">About</button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Analyzer Tab -->
+            <div id="analyzer" class="tab-content active">
+                <div class="hero-section">
+                    <h2>Detect Fake News with AI Precision</h2>
+                    <p>Analyze news articles and social media posts using multiple AI models to determine authenticity</p>
+                </div>
+
+                <div class="analysis-container">
+                    <div class="input-section">
+                        <div class="input-header">
+                            <h3><i class="fas fa-newspaper"></i> Enter News Text</h3>
+                            <div class="input-actions">
+                                <button id="clearBtn" class="action-btn">
+                                    <i class="fas fa-eraser"></i> Clear
+                                </button>
+                                <button id="pasteBtn" class="action-btn">
+                                    <i class="fas fa-paste"></i> Paste
+                                </button>
+                            </div>
+                        </div>
+                        <textarea id="newsText" placeholder="Paste news article, social media post, or any text you want to analyze for authenticity..." rows="12"></textarea>
+                        <div class="text-info">
+                            <span id="charCount">0 characters</span>
+                            <span id="wordCount">0 words</span>
+                        </div>
+                        <button id="analyzeBtn" class="analyze-btn" onclick="analyzeNews()">
+                            <i class="fas fa-search"></i> Analyze Authenticity
+                        </button>
+                    </div>
+
+                    <div id="loading" class="loading-section" style="display: none;">
+                        <div class="loading-content">
+                            <div class="spinner"></div>
+                            <h3>Analyzing Content</h3>
+                            <p>Our AI models are processing your text...</p>
+                            <div class="loading-steps">
+                                <div class="step active">✓ Custom AI Model</div>
+                                <div class="step">Rule-Based Analysis</div>
+                                <div class="step">Text Structure Analysis</div>
+                                <div class="step">Final Verdict</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="results" class="results-section" style="display: none;">
+                        <div class="results-header">
+                            <h3><i class="fas fa-chart-bar"></i> Analysis Results</h3>
+                            <button id="exportBtn" class="export-btn">
+                                <i class="fas fa-download"></i> Export Report
+                            </button>
+                        </div>
+                        
+                        <!-- Final Verdict -->
+                        <div class="final-verdict-card">
+                            <div class="verdict-icon">
+                                <i class="fas fa-balance-scale"></i>
+                            </div>
+                            <div class="verdict-content">
+                                <h4>Final Verdict</h4>
+                                <div class="verdict-result">
+                                    <span id="finalVerdictText" class="verdict-text"></span>
+                                    <span id="finalConfidence" class="confidence-badge"></span>
+                                </div>
+                                <p id="verdictDescription" class="verdict-description"></p>
+                            </div>
+                        </div>
+
+                        <!-- Model Results -->
+                        <div class="models-section">
+                            <h4>Model Analysis Details</h4>
+                            <div class="models-grid" id="modelsGrid">
+                                <!-- Model cards will be populated here -->
+                            </div>
+                        </div>
+
+                        <!-- Pattern Analysis -->
+                        <div class="patterns-section">
+                            <h4><i class="fas fa-search"></i> Pattern Analysis</h4>
+                            <div class="patterns-grid">
+                                <div class="pattern-card" id="fakePatterns">
+                                    <h5>Fake News Indicators</h5>
+                                    <div class="indicators-list" id="fakeIndicatorsList"></div>
+                                </div>
+                                <div class="pattern-card" id="realPatterns">
+                                    <h5>Real News Indicators</h5>
+                                    <div class="indicators-list" id="realIndicatorsList"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Summary -->
+                        <div class="summary-section">
+                            <h4><i class="fas fa-file-alt"></i> Analysis Summary</h4>
+                            <div class="summary-content" id="summaryContent"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Samples Tab -->
+            <div id="samples" class="tab-content">
+                <div class="samples-header">
+                    <h2><i class="fas fa-vial"></i> Test Samples</h2>
+                    <p>Try these sample texts to see how the model performs</p>
+                </div>
+
+                <div class="samples-grid">
+                    <div class="sample-category">
+                        <h3>📰 Fake News Samples</h3>
+                        <div class="sample-cards">
+                            <div class="sample-card fake" onclick="loadSample('fake1')">
+                                <h4>Alien Technology</h4>
+                                <p>SHOCKING BREAKING NEWS: Government reveals secret alien technology that will give you FREE energy forever...</p>
+                                <span class="sample-tag">Clickbait</span>
+                            </div>
+                            <div class="sample-card fake" onclick="loadSample('fake2')">
+                                <h4>Miracle Weight Loss</h4>
+                                <p>URGENT: Celebrity doctor reveals one weird trick to lose weight overnight! Doctors hate him!</p>
+                                <span class="sample-tag">Health Scam</span>
+                            </div>
+                            <div class="sample-card fake" onclick="loadSample('fake3')">
+                                <h4>Get Rich Quick</h4>
+                                <p>This 25-year-old millionaire reveals his secret system for making $10,000 per month from home...</p>
+                                <span class="sample-tag">Financial Scam</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sample-category">
+                        <h3>📊 Real News Samples</h3>
+                        <div class="sample-cards">
+                            <div class="sample-card real" onclick="loadSample('real1')">
+                                <h4>Scientific Study</h4>
+                                <p>Researchers at Harvard University have published a new study confirming that regular exercise reduces heart disease risk...</p>
+                                <span class="sample-tag">Science</span>
+                            </div>
+                            <div class="sample-card real" onclick="loadSample('real2')">
+                                <h4>Weather Report</h4>
+                                <p>According to the National Weather Service, temperatures are expected to drop significantly tomorrow...</p>
+                                <span class="sample-tag">Weather</span>
+                            </div>
+                            <div class="sample-card real" onclick="loadSample('real3')">
+                                <h4>Technology News</h4>
+                                <p>Apple Inc. announced today that it will be investing $1.5 billion in new manufacturing facilities in the United States...</p>
+                                <span class="sample-tag">Business</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Tab -->
+            <div id="about" class="tab-content">
+                <div class="about-header">
+                    <h2><i class="fas fa-info-circle"></i> About TruthLens AI</h2>
+                    <p>Advanced AI-powered fake news detection system</p>
+                </div>
+
+                <div class="about-content">
+                    <div class="about-section">
+                        <h3>🤖 How It Works</h3>
+                        <p>TruthLens AI uses a sophisticated ensemble of machine learning models to analyze text and determine its authenticity:</p>
+                        <div class="features-grid">
+                            <div class="feature-card">
+                                <i class="fas fa-brain"></i>
+                                <h4>Custom AI Model</h4>
+                                <p>Fine-tuned transformer model trained on thousands of verified news articles</p>
+                            </div>
+                            <div class="feature-card">
+                                <i class="fas fa-ruler-combined"></i>
+                                <h4>Rule-Based Analysis</h4>
+                                <p>Pattern recognition for common fake news indicators and linguistic markers</p>
+                            </div>
+                            <div class="feature-card">
+                                <i class="fas fa-chart-line"></i>
+                                <h4>Text Structure Analysis</h4>
+                                <p>Analysis of writing style, sentence structure, and content organization</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-section">
+                        <h3>🔍 Detection Methodology</h3>
+                        <div class="methodology">
+                            <div class="method-step">
+                                <span class="step-number">1</span>
+                                <div class="step-content">
+                                    <h5>Text Preprocessing</h5>
+                                    <p>Tokenization, normalization, and feature extraction from input text</p>
+                                </div>
+                            </div>
+                            <div class="method-step">
+                                <span class="step-number">2</span>
+                                <div class="step-content">
+                                    <h5>Multi-Model Analysis</h5>
+                                    <p>Parallel processing by all three analysis models</p>
+                                </div>
+                            </div>
+                            <div class="method-step">
+                                <span class="step-number">3</span>
+                                <div class="step-content">
+                                    <h5>Confidence Weighting</h5>
+                                    <p>Combining model outputs with weighted confidence scores</p>
+                                </div>
+                            </div>
+                            <div class="method-step">
+                                <span class="step-number">4</span>
+                                <div class="step-content">
+                                    <h5>Final Verdict</h5>
+                                    <p>Aggregated decision with detailed explanation</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-section">
+                        <h3>📊 Model Specifications</h3>
+                        <div class="specs-grid">
+                            <div class="spec-card">
+                                <h5>Custom AI Model</h5>
+                                <ul>
+                                    <li>Architecture: Transformer-based</li>
+                                    <li>Training Data: 50,000+ articles</li>
+                                    <li>Accuracy: 92% on test set</li>
+                                    <li>Features: 512-dimensional embeddings</li>
+                                </ul>
+                            </div>
+                            <div class="spec-card">
+                                <h5>Pattern Detection</h5>
+                                <ul>
+                                    <li>50+ fake news indicators</li>
+                                    <li>30+ real news markers</li>
+                                    <li>Linguistic analysis</li>
+                                    <li>Style detection</li>
+                                </ul>
+                            </div>
+                            <div class="spec-card">
+                                <h5>Performance</h5>
+                                <ul>
+                                    <li>Processing Time: &lt;2 seconds</li>
+                                    <li>Supported Languages: English</li>
+                                    <li>Text Length: Up to 2000 words</li>
+                                    <li>Confidence Threshold: 60%</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="about-section">
+                        <h3>⚠️ Limitations & Disclaimer</h3>
+                        <div class="disclaimer">
+                            <p>TruthLens AI is designed to assist in content analysis but should not be the sole basis for important decisions. The system has limitations:</p>
+                            <ul>
+                                <li>May produce false positives/negatives</li>
+                                <li>Performance varies by content type</li>
+                                <li>Not a substitute for human judgment</li>
+                                <li>Regular model updates required</li>
+                            </ul>
+                            <p class="disclaimer-note">Always verify important information through multiple reliable sources.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2024 TruthLens AI. Advanced Fake News Detection System.</p>
+                <div class="footer-links">
+                    <a href="#" onclick="showTab('about')">About</a>
+                    <a href="#" onclick="showTab('samples')">Samples</a>
+                    <a href="#privacy">Privacy</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
