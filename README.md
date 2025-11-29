@@ -7,7 +7,3 @@ Advanced AI-powered fake news detection system using multiple machine learning m
 - Multiple analysis methods
 - Professional web interface
 - Real-time pattern detection
-
-## Deployment
-- Backend: Render.com
-- Frontend: Render.com (Static Site)
